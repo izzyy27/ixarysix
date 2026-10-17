@@ -35,7 +35,8 @@ body{isolation:isolate;background:#090c11;color:#f7f8fb;text-shadow:0 2px 8px rg
 .profile-card{padding:clamp(24px,5vw,46px);border:1px solid var(--panel-border);border-radius:30px;background:linear-gradient(145deg,rgba(10,14,21,.48),rgba(10,14,21,.34));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 28px 90px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.1);animation:page-arrive .8s cubic-bezier(.2,.75,.2,1) both}
 @keyframes page-arrive{from{opacity:0;transform:translateY(22px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 .profile-header{gap:22px;margin-bottom:20px}
-.profile{width:100px;height:100px;border-color:rgba(231,189,87,.8);box-shadow:0 0 0 6px rgba(231,189,87,.09),0 12px 36px rgba(0,0,0,.48)}
+.profile{width:100px;height:100px;border:2px solid rgba(231,189,87,.8);box-shadow:0 8px 28px rgba(0,0,0,.42)}
+.profile::after{content:none}
 .name{font-size:clamp(25px,5vw,38px);letter-spacing:.04em;text-shadow:0 3px 18px rgba(0,0,0,.7)}
 .tag{color:#f4d993;background:var(--accent-soft);border-color:rgba(231,189,87,.26);letter-spacing:.08em}
 .description{max-width:520px;color:#e1e5ed;font-size:15px;line-height:1.8}
@@ -96,6 +97,42 @@ button:focus-visible,a:focus-visible,.mode-btn:focus-visible,.chess-square:focus
 @media(prefers-reduced-motion:reduce){
  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+.lock-screen{position:fixed;inset:0;z-index:2000;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at 50% 42%,rgba(32,34,38,.72),rgba(5,6,8,.94) 72%);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);transition:opacity .55s cubic-bezier(.2,.75,.2,1),visibility .55s}
+.lock-screen.is-unlocked{opacity:0;visibility:hidden;pointer-events:none}
+.lock-panel{position:relative;width:min(100%,390px);padding:34px 30px 28px;border:1px solid rgba(255,255,255,.16);border-radius:28px;background:linear-gradient(150deg,rgba(32,34,39,.86),rgba(12,13,16,.88));box-shadow:0 30px 100px rgba(0,0,0,.62),inset 0 1px rgba(255,255,255,.09);text-align:center;animation:lock-arrive .85s cubic-bezier(.2,.75,.2,1) both}
+.lock-panel::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(140deg,rgba(255,255,255,.22),transparent 40%,rgba(224,185,60,.18));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+@keyframes lock-arrive{from{opacity:0;transform:translateY(18px) scale(.975);filter:blur(8px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+.lock-emblem{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 18px;border:1px solid rgba(224,185,60,.32);border-radius:19px;background:linear-gradient(145deg,rgba(224,185,60,.18),rgba(224,185,60,.045));box-shadow:0 0 35px rgba(224,185,60,.10);color:#f0ce71;font-size:25px}
+.lock-eyebrow{color:#e0b93c;font-size:10px;font-weight:700;letter-spacing:3px}
+.lock-title{margin-top:9px;font-size:27px;font-weight:750;letter-spacing:-.5px}
+.lock-copy{margin:9px 0 22px;color:#a5a6aa;font-size:13px;line-height:1.6}
+.lock-digits{position:relative;display:flex;justify-content:center;gap:13px;margin:0 auto 20px}
+.lock-digit{display:grid;place-items:center;width:49px;height:55px;border:1px solid rgba(255,255,255,.15);border-radius:14px;background:rgba(255,255,255,.045);color:#f3d77f;font-size:25px;transition:border-color .2s ease,background .2s ease,transform .2s ease}
+.lock-digit.filled{border-color:rgba(224,185,60,.48);background:rgba(224,185,60,.09);transform:translateY(-2px)}
+.lock-digits:focus-within .lock-digit{border-color:rgba(224,185,60,.65)}
+.lock-input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:text}
+.lock-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.lock-key{min-height:48px;border:1px solid rgba(255,255,255,.09);border-radius:14px;background:rgba(255,255,255,.055);color:#f4f4f5;font-size:17px;font-weight:600;cursor:pointer;transition:transform .2s cubic-bezier(.2,.75,.2,1),background .2s ease,border-color .2s ease,box-shadow .2s ease}
+.lock-key:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.1);box-shadow:0 8px 18px rgba(0,0,0,.2)}
+.lock-key:active{transform:scale(.96)}
+.lock-key.utility{color:#c6c7ca;font-size:12px;letter-spacing:.5px}
+.lock-submit{width:100%;min-height:49px;margin-top:15px;border:1px solid rgba(255,226,149,.32);border-radius:15px;background:linear-gradient(135deg,#f0d487,#c49b3f);box-shadow:0 8px 24px rgba(206,165,66,.15);color:#17130a;font-size:13px;font-weight:800;letter-spacing:1px;cursor:pointer;transition:transform .2s ease,filter .2s ease,box-shadow .2s ease}
+.lock-submit:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 12px 28px rgba(206,165,66,.24)}
+.lock-submit:active{transform:scale(.985)}
+.lock-message{min-height:18px;margin-top:12px;color:#aaa;font-size:12px}
+.lock-message.error{color:#ff9b9b}
+.lock-panel.shake{animation:lock-shake .38s ease}
+@keyframes lock-shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+body.pin-locked{overflow:hidden}
+button:focus-visible{outline:2px solid #f0ce71;outline-offset:3px}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.connect-card,.game-row,.mode-btn,.tool-card{transition:transform .28s cubic-bezier(.2,.75,.2,1),box-shadow .28s ease,border-color .28s ease,background .28s ease}
+@media(hover:hover){.game-row:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.17);box-shadow:0 12px 30px rgba(0,0,0,.36)}}
+@media(max-width:420px){.lock-panel{padding:30px 22px 24px;border-radius:24px}.lock-digit{width:45px;height:51px}.lock-screen{padding:16px}}
+@media(prefers-reduced-motion:reduce){
+ .lock-panel{animation:none}
+ .lock-screen,.lock-digit,.lock-key,.lock-submit{transition:none}
+}
 </style></head>
 <body><!-- Replace luma.mp4 with another MP4 filename in this folder to change the wallpaper video. --><video class="background-video" autoplay muted loop playsinline aria-hidden="true"><source src="luma.mp4" type="video/mp4"></video><div class="pattern"></div><div class="glow glow1"></div><div class="glow glow2"></div>
 <div class="container"><div class="profile-card"><div class="profile-header"><div class="profile"></div><div class="profile-info"><h1 class="name">IXARYS_IX</h1><div class="tag">PERSONAL WEBSITE</div></div></div><p class="description">Welcome to my website 👋<br>Explore my links, projects and games.<br>Everything you need is just a click away.</p>
@@ -105,6 +142,40 @@ button:focus-visible,a:focus-visible,.mode-btn:focus-visible,.chess-square:focus
 <div class="game-modal" id="carromModal"><div class="game-box carrom-box"><div class="game-top"><div><div class="game-title">🔴⚪ CARROM</div><div class="score" id="carromModeLabel">CHOOSE A MODE TO START</div></div><button class="close-game" id="closeCarrom">×</button></div><div class="mode-select" id="carromModeSelect"><div class="mode-btn" id="carromModeAI">🤖 VS AI<span>Play against the computer</span></div><div class="mode-btn" id="carromMode1v1">🧑‍🤝‍🧑 1 VS 1<span>Play with a friend on this device</span></div></div><div class="hidden" id="carromGameScreen"><div class="carrom-board-wrap"><canvas id="carromCanvas"></canvas></div><div class="carrom-players" id="carromPlayers"><div class="carrom-player" id="carromPlayer1"><span class="coin-dot white"></span><span class="player-name" id="carromPlayer1Name">YOU<span class="player-color">WHITE COINS</span></span></div><div class="carrom-player" id="carromPlayer2"><span class="coin-dot black"></span><span class="player-name" id="carromPlayer2Name">AI<span class="player-color">BLACK COINS</span></span></div></div><div class="carrom-score" id="carromScore">YOU (WHITE): 0 | AI (BLACK): 0</div><div class="tic-status" id="carromStatus">YOUR TURN • WHITE</div><div class="carrom-status-note" id="carromStatusNote">White = Player 1 • Black = Player 2 / AI</div><div class="carrom-controls"><input type="range" min="0" max="100" value="50" id="carromSlider" class="carrom-slider"></div><div class="game-help">DRAG ON THE BOARD TO AIM, RELEASE TO SHOOT</div><div class="tic-actions"><button class="start-game tic-back" id="carromChangeMode">CHANGE MODE</button><button class="start-game" id="carromRestart">RESTART</button></div></div></div></div>
 <div class="game-modal" id="dinoModal"><div class="game-box dino-box"><div class="game-top"><div><div class="game-title">🐥 CHICK RUNNER</div><div class="score" id="dinoScore">SCORE: 0</div></div><button class="close-game" id="closeDino">×</button></div><div class="dino-wrap"><canvas id="dinoCanvas" width="800" height="380" aria-label="Chick Runner game"></canvas></div><div class="dino-help">PRESS SPACE, TAP, OR CLICK TO JUMP</div><div class="tic-actions"><button class="start-game" id="dinoRestart">RESTART</button></div></div></div>
 <div class="game-modal" id="chessModal"><div class="game-box chess-box"><div class="game-top"><div><div class="game-title">♞♜ CHESS</div><div class="score" id="chessModeLabel">CHOOSE A MODE TO START</div></div><button class="close-game" id="closeChess">×</button></div><div class="mode-select" id="chessModeSelect"><div class="mode-btn" id="chessModeAI">🤖 VS AI<span>Play against the computer</span></div><div class="mode-btn" id="chessMode1v1">🧑‍🤝‍🧑 1 VS 1<span>Play with a friend on this device</span></div></div><div class="hidden" id="chessGameScreen"><div class="chess-board" id="chessBoard" aria-label="Chess board"></div><div class="chess-status" id="chessStatus">WHITE'S TURN</div><div class="chess-help">SELECT A PIECE, THEN SELECT A HIGHLIGHTED SQUARE</div><div class="tic-actions"><button class="start-game tic-back" id="chessChangeMode">CHANGE MODE</button><button class="start-game" id="chessRestart">RESTART</button></div></div></div></div>
+<div class="lock-screen" id="lockScreen">
+<form class="lock-panel" id="lockForm" aria-labelledby="lockTitle">
+<div class="lock-emblem" aria-hidden="true">✦</div>
+<div class="lock-eyebrow">IXARYS_IX • PRIVATE ACCESS</div>
+<h2 class="lock-title" id="lockTitle">Welcome back</h2>
+<p class="lock-copy">Enter your 4-digit passcode to unlock the experience.</p>
+<div class="lock-digits"><span class="lock-digit" aria-hidden="true"></span><span class="lock-digit" aria-hidden="true"></span><span class="lock-digit" aria-hidden="true"></span><span class="lock-digit" aria-hidden="true"></span><input class="lock-input" id="lockInput" name="access-code" type="text" inputmode="numeric" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="4" pattern="[0-9]{4}" aria-label="Four-digit passcode"></div>
+<div class="lock-keypad" id="lockKeypad" aria-label="Passcode keypad">
+<button class="lock-key" type="button" data-digit="1">1</button><button class="lock-key" type="button" data-digit="2">2</button><button class="lock-key" type="button" data-digit="3">3</button>
+<button class="lock-key" type="button" data-digit="4">4</button><button class="lock-key" type="button" data-digit="5">5</button><button class="lock-key" type="button" data-digit="6">6</button>
+<button class="lock-key" type="button" data-digit="7">7</button><button class="lock-key" type="button" data-digit="8">8</button><button class="lock-key" type="button" data-digit="9">9</button>
+<button class="lock-key utility" type="button" data-action="clear">CLEAR</button><button class="lock-key" type="button" data-digit="0">0</button><button class="lock-key utility" type="button" data-action="backspace" aria-label="Delete last digit">⌫</button>
+</div>
+<button class="lock-submit" type="submit">UNLOCK WEBSITE</button>
+<p class="lock-message" id="lockMessage" aria-live="polite">Your passcode is required each time you visit.</p>
+</form>
+</div>
+<script>
+(()=>{
+ const lockScreen=document.getElementById("lockScreen"),lockForm=document.getElementById("lockForm"),lockInput=document.getElementById("lockInput"),lockKeypad=document.getElementById("lockKeypad"),lockMessage=document.getElementById("lockMessage"),lockDigits=lockScreen.querySelectorAll(".lock-digit"),lockPanel=lockForm;
+ lockInput.value="";
+ for(const digit of lockDigits)digit.classList.remove("filled");
+ document.body.classList.add("pin-locked");
+ for(const child of document.body.children){if(child!==lockScreen)child.inert=true}
+ function updateLockDigits(){for(let index=0;index<lockDigits.length;index++){const filled=index<lockInput.value.length;lockDigits[index].textContent=filled?"•":"";lockDigits[index].classList.toggle("filled",filled)}}
+ let lockInputStarted=false;
+ function prepareLockInput(){if(lockInputStarted)return;lockInput.value="";updateLockDigits();lockInputStarted=true}
+ function clearLockMessage(){lockMessage.textContent="";lockMessage.classList.remove("error")}
+ lockInput.addEventListener("focus",prepareLockInput);
+ lockInput.addEventListener("input",()=>{lockInput.value=lockInput.value.replace(/\D/g,"").slice(0,4);updateLockDigits();clearLockMessage()});
+ lockKeypad.addEventListener("click",event=>{const button=event.target.closest("button");if(!button)return;prepareLockInput();if(button.dataset.digit!==undefined){if(lockInput.value.length<4)lockInput.value+=button.dataset.digit}else if(button.dataset.action==="clear"){lockInput.value=""}else if(button.dataset.action==="backspace"){lockInput.value=lockInput.value.slice(0,-1)}updateLockDigits();clearLockMessage()});
+ lockForm.addEventListener("submit",event=>{event.preventDefault();prepareLockInput();if(lockInput.value!=="2047"){lockMessage.textContent=lockInput.value.length===4?"That passcode is not correct. Try again.":"Please enter all 4 digits.";lockMessage.classList.add("error");lockPanel.classList.remove("shake");void lockPanel.offsetWidth;lockPanel.classList.add("shake");lockInput.value="";updateLockDigits();return}lockMessage.textContent="Access granted.";lockScreen.classList.add("is-unlocked");lockScreen.setAttribute("aria-hidden","true");document.body.classList.remove("pin-locked");for(const child of document.body.children){if(child!==lockScreen)child.inert=false}window.setTimeout(()=>lockScreen.remove(),600)});
+})();
+</script>
 <script>
 /* TIC TAC TOE */
 const ticModal=document.getElementById("ticModal"),openTic=document.getElementById("openTic"),closeTic=document.getElementById("closeTic"),ticModeLabel=document.getElementById("ticModeLabel"),ticModeSelect=document.getElementById("ticModeSelect"),ticGameScreen=document.getElementById("ticGameScreen"),modeAI=document.getElementById("modeAI"),mode1v1=document.getElementById("mode1v1"),ticBoardEl=document.getElementById("ticBoard"),ticStatus=document.getElementById("ticStatus"),ticChangeMode=document.getElementById("ticChangeMode"),ticRestart=document.getElementById("ticRestart");let ticMode=null,ticBoard=Array(9).fill(null),ticCurrent="X",ticActive=false;const WIN_LINES=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
